@@ -15,7 +15,7 @@ OOTDiffusion 的打包版本
 
 ## Instructions
 
-`pip install git+https://github.com/viktorfa/oot_diffusion.git`
+`pip install git+https://github.com/alihssan/oot-diffusion.git`
 
 Examples for Colab. But can be used anywhere.
 
