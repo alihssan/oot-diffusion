@@ -4,7 +4,7 @@ from pathlib import Path
 
 from oot_diffusion.inference_segmentation import ClothesMaskModel
 from .inference_ootd import OOTDiffusion
-from .ootd_utils import resize_crop_center
+from .ootd_utils import resize_crop_center,read_image_from_url_and_convert
 
 
 DEFAULT_HG_ROOT = Path(os.getcwd()) / "oodt_models"
@@ -81,11 +81,13 @@ class OOTDiffusionModel:
         if isinstance(cloth_path, Image.Image):
             cloth_image = cloth_path
         else:
-            cloth_image = Image.open(cloth_path)
+            cloth_image = read_image_from_url_and_convert(cloth_path)
+
         if isinstance(model_path, Image.Image):
             model_image = model_path
         else:
-            model_image = Image.open(model_path)
+            model_image = read_image_from_url_and_convert(model_path)
+            
         model_image = resize_crop_center(model_image, 768, 1024).convert("RGB")
         cloth_image = resize_crop_center(cloth_image, 768, 1024).convert("RGB")
 
