@@ -2,10 +2,30 @@ from typing import Literal
 import numpy as np
 import cv2
 from PIL import Image, ImageDraw
+import requests
 
 from oot_diffusion.humanparsing.utils import label_map, remove_outliers
 
-
+def read_image_from_url_and_convert(url):
+    # Send a GET request to the URL
+    response = requests.get(url)
+    
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Convert the image data to a numpy array
+        img_array = np.frombuffer(response.content, np.uint8)
+        
+        # Decode the numpy array as an image using OpenCV
+        img_cv2 = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+        
+        # Convert the OpenCV image (BGR) to a PIL image (RGB)
+        img_rgb = cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB)
+        img_pil = Image.fromarray(img_rgb)
+        
+        return img_pil
+    else:
+        raise Exception(f"Failed to fetch image from URL, status code: {response.status_code}")
+    
 def extend_arm_mask(wrist, elbow, scale):
     wrist = elbow + scale * (wrist - elbow)
     return wrist
